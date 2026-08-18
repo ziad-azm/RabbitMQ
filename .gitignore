@@ -1,0 +1,87 @@
+# ============================================================
+# Dependencies
+# ============================================================
+node_modules/
+.pnp/
+.pnp.js
+.yarn/cache/
+.yarn/unplugged/
+.yarn/install-state.gz
+
+# ============================================================
+# Build output
+# ============================================================
+dist/
+build/
+*.tsbuildinfo
+
+# ============================================================
+# Tests / coverage
+# ============================================================
+coverage/
+.nyc_output/
+*.lcov
+
+# ============================================================
+# Environment
+# ============================================================
+# Real env files are never committed. Each one has a committed
+# .env.example next to it — copy it on first setup:
+#   cp .env.example .env
+#   cp user-service/.env.example user-service/.env
+#   cp notification-service/.env.example notification-service/.env
+.env
+.env.local
+.env.*.local
+*.env.local
+!.env.example
+!**/.env.example
+
+# ============================================================
+# Logs
+# ============================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ============================================================
+# Editors / IDE
+# ============================================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+
+# ============================================================
+# OS
+# ============================================================
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ============================================================
+# Docker / RabbitMQ local state
+# ============================================================
+# Named volumes live in Docker, but if you ever bind-mount the
+# broker's data dir locally, keep it out of git.
+rabbitmq_data/
+docker-compose.override.yml
+
+# ============================================================
+# Misc
+# ============================================================
+.cache/
+.temp/
+tmp/
+*.tgz

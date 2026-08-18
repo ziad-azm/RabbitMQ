@@ -1,0 +1,84 @@
+# ============================================================
+# docker-compose.yml
+#
+# WHY IT EXISTS:
+#   Spins up RabbitMQ + both microservices in isolated containers
+#   so you can run the full demo with a single `docker-compose up`.
+#
+# RABBITMQ CONCEPTS:
+#   - RabbitMQ broker: the central message server
+#   - Management UI (port 15672): visualise exchanges, queues, messages
+#   - Durable setup: data survives container restarts via named volume
+# ============================================================
+
+version: '3.8'
+
+services:
+  # ─────────────────────────────────────────
+  # RabbitMQ Broker + Management UI
+  # ─────────────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"    # AMQP protocol port (used by services)
+      - "15672:15672"  # Management UI (open in browser)
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-admin}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-admin123}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microservices
+
+  # ─────────────────────────────────────────
+  # User Service – REST API + Event Producer
+  # ─────────────────────────────────────────
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices
+
+  # ─────────────────────────────────────────
+  # Notification Service – RabbitMQ Consumer
+  # ─────────────────────────────────────────
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - RABBITMQ_URL=amqp://admin:admin123@rabbitmq:5672
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  microservices:
+    driver: bridge

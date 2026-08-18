@@ -1,0 +1,109 @@
+Act as a Senior NestJS Architect and Backend Mentor.
+
+Create a complete educational NestJS project that demonstrates RabbitMQ from beginner to advanced level.
+
+Requirements:
+
+1. Use:
+   - NestJS
+   - TypeScript
+   - RabbitMQ
+   - Docker Compose
+   - ConfigModule
+   - Class Validator
+   - Environment Variables
+
+2. The project should contain 2 microservices:
+
+   Service A: User Service
+   - REST API
+   - Create User endpoint
+   - Get Users endpoint
+   - Publish events to RabbitMQ
+
+   Service B: Notification Service
+   - RabbitMQ Consumer
+   - Receives events from User Service
+   - Simulates sending Email and SMS notifications
+
+3. Explain RabbitMQ concepts using this project:
+   - Producer
+   - Consumer
+   - Queue
+   - Exchange
+   - Routing Key
+   - Acknowledgment (ACK)
+   - Message Retry
+   - Dead Letter Queue (DLQ)
+   - Durable Queues
+   - Prefetch Count
+
+4. Project Structure:
+   Show a production-ready folder structure.
+
+5. Docker:
+   Provide:
+   - docker-compose.yml
+   - RabbitMQ Management UI
+   - Environment configuration
+
+6. Code:
+   Generate all files with complete code:
+   - main.ts
+   - app.module.ts
+   - rabbitmq.module.ts
+   - rabbitmq.service.ts
+   - controllers
+   - services
+   - DTOs
+   - consumers
+   - configuration files
+
+7. Demonstration Flow:
+
+   When calling:
+
+   POST /users
+
+   Request:
+
+   {
+     "name": "Ziad",
+     "email": "ziad@example.com"
+   }
+
+   Explain step by step:
+
+   1. HTTP Request arrives
+   2. User saved
+   3. Event published
+   4. RabbitMQ receives message
+   5. Queue stores message
+   6. Notification Service consumes message
+   7. ACK sent
+   8. Message removed from queue
+
+8. Advanced Section:
+
+   Add another example:
+
+   UserCreatedEvent
+
+   If email sending fails:
+   - Retry 3 times
+   - Move to Dead Letter Queue
+   - Explain exactly how RabbitMQ handles the message lifecycle
+
+9. Include:
+   - Architecture diagrams using ASCII
+   - Sequence diagrams
+   - Request/Response examples
+   - RabbitMQ Management screenshots description
+   - Testing instructions
+
+10. For every file:
+    - Explain why it exists
+    - Explain what it does
+    - Explain RabbitMQ concepts involved
+
+Output the solution in a tutorial style, as if teaching a backend developer who already knows NestJS but has never used RabbitMQ before.
